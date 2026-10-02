@@ -1303,7 +1303,33 @@ svg.kicon{width:23px;height:23px;display:block;fill:none;stroke:currentColor;str
   }
   function inputText(){return textInput.innerText.replace(/\u00a0/g,' ').trim()}
   function updateSend(){sendBtn.classList.toggle('show',!!inputText());sendBtn.textContent=editingTarget?'수정':'전송'}
-  textInput.oninput=updateSend;textInput.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}};
+  textInput.oninput=updateSend;function restore(){
+  try{
+    const raw=localStorage.getItem(STORAGE);
+    if(!raw)return;
+
+    const saved=JSON.parse(raw);
+
+    if(saved.html){
+      chatMain.innerHTML=saved.html;
+    }
+
+    if(saved.state){
+      state={...state,...saved.state};
+    }
+
+    // 범용판은 저장된 과거 endpoint와 관계없이
+    // 항상 /general 프록시를 사용한다.
+    state.apiMode='proxy';
+    state.apiEndpoint=PROXY_ENDPOINT;
+    state.apiModel='openrouter/free';
+
+  }catch(e){
+    console.warn('restore failed',e);
+  }
+
+  applyState();
+}
   $('#emojiBtn').onclick=()=>{textInput.focus();document.execCommand('insertText',false,'🙂');updateSend()};
   function sendMessage(){
     const t=inputText();if(!t)return;
