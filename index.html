@@ -1097,7 +1097,7 @@ svg.kicon{width:23px;height:23px;display:block;fill:none;stroke:currentColor;str
       if(saved.state)state={...state,...saved.state};
       // 이전 OpenRouter 직접호출/구 workers.dev 주소를 저장해 둔 브라우저도 자동으로 새 프록시로 이전한다.
       const ep=String(state.apiEndpoint||'');
-      if(state.apiMode!=='proxy' || !ep || /openrouter\.ai|api\.openai\.com|railchat-proxy\.thkim8369\.workers\.dev/i.test(ep)){
+      
         state.apiMode='proxy';
         state.apiEndpoint=PROXY_ENDPOINT;
         state.apiModel='openrouter/free';
